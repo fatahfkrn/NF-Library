@@ -67,6 +67,17 @@ def kurangStok(kd_buku):            # Function untuk mengurangi stok buku
       for i in dataBuku:
             myfile.write(i+"\n")
       myfile.close()
+def nambahStok(kd_buku):
+      dataBuku = readBuku()
+      for i in range(len(dataBuku)): #Ini adalah perulangan 
+            if dataBuku[i][:6] == kd_buku: # Mengecek buku ada atau tidak di dalam file 
+                  dataBuku[i] = dataBuku[i].split(", ") #Ini untuk mengubah jadi list (ngambil stok)
+                  dataBuku[i][-1] = str(int(dataBuku[i][-1]) + 1)# Ngubah stok 
+                  dataBuku[i] = ", ".join(dataBuku[i])#Ngembaliin menjadi str
+      myfile = open('File Buku.txt', 'w+')
+      for i in dataBuku:
+            myfile.write(i+"\n")
+      myfile.close()
 def readPinjamBuku():                # Function untuk mengakses file peminjaman
       a_list = []
       myfile = open("File Peminjaman.txt")
@@ -204,6 +215,7 @@ while True:
             kd_buku = input("Kode buku: ")
             if cek_buku(kd_buku):
                   kd_anggota = input("Kode anggota: ")
+                  nambahStok(kd_buku)
                   if anggota_pinjam(kd_buku,kd_anggota):
                         denda = int(input("Keterlambatan pengembalian (dalam hari, 0 jika tidak terlambat): "))
                         if cek_statusAngggota(kd_anggota):

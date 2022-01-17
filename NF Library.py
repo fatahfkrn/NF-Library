@@ -30,7 +30,7 @@ def fitur2():
       print("Penambahan buku baru dengan kode " + kode+" dan judul "+judul+" berhasil.")
       
       #Menambahkan data ke file buku
-      myFile = open('File Buku.txt', 'a+')
+      myFile = open('File Buku.txt')
       myFile.write(kode + ', ' + judul + ', ' + penulis + ', ' + stok + '\n')
       myFile.close()
 
@@ -52,8 +52,9 @@ def fitur3():
             if i[:6] == kd_buku:
                   kodeBuku = True
 
+
       #Mengecek apakah inputan kode buku ada didalam file buku
-      if kodeBuku :           #jika ada
+      if kodeBuku :           #jika benar
             kd_anggota = input("Kode anggota: ")
             
             #Akses File Anggota
@@ -79,7 +80,6 @@ def fitur3():
                               if int(dataBuku[i][-1]) > 0:
                                     stock = True
                               dataBuku[i] = ', '.join(dataBuku[i])#Ngembaliin menjadi str
-                              print(dataBuku[i])
                               
 
                   #Mengecek apakah stock buku ada atau tidak
@@ -150,12 +150,33 @@ def fitur4():
       #Mengecek apakah kode anggota yang diinput ada di file peminjaman
       if kodeBuku:            #
             kd_anggota = input("Kode anggota: ")
+            
+            #mengakses file buku
+            dataBuku = []
+            f = open('File Buku.txt')
+            for each_line in f:
+                  dataBuku.append(each_line.strip())
+            f.close()
+            
+            #mengakses stok buku untuk menambahkan stok
+            for i in range(len(dataBuku)): #Ini adalah perulangan 
+                  if dataBuku[i][:6] == kd_buku: # Mengecek buku ada atau tidak di dalam file 
+                        dataBuku[i] = dataBuku[i].split(", ") #Ini untuk mengubah jadi list (ngambil stok)
+                        dataBuku[i][-1] = str(int(dataBuku[i][-1]) + 1)# Ngubah stok 
+                        dataBuku[i] = ', '.join(dataBuku[i])#Ngembaliin menjadi str
+
+            #memperbarui stock buku yang ada di file buku
+            myfile = open('File Buku.txt', 'w+')
+            for i in dataBuku:
+                  myfile.write(i+"\n")
+            myfile.close()
+
             for i in range (len(dataPinjam)):
                   if dataPinjam[i][:6] == kd_buku:
                         dataPinjam[i] = dataPinjam[i].split(", ")
                         if dataPinjam[i].count(kd_anggota) != 0:
                               dataPinjam[i].remove(kd_anggota)
-                              print(dataPinjam[i])
+
                               if (len(dataPinjam[i])) == 1:
                                     del dataPinjam[i]
                               else:
